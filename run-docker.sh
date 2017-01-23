@@ -9,17 +9,21 @@ docker exec $CONTAINER_ID zap-cli -p 2375 status -t 60 && docker exec $CONTAINER
 
 docker exec $CONTAINER_ID zap-cli -p 2375 spider $TARGET_URL
 
-docker exec $CONTAINER_ID zap-cli -p 2375 ajax-spider $TARGET_URL
+# currently causes crash (firefox not working with xvfb in weekly build)
+#docker exec $CONTAINER_ID zap-cli -p 2375 ajax-spider $TARGET_URL
 
-#docker exec $CONTAINER_ID zap-cli -p 2375 active-scan -r $TARGET_URL
+docker exec $CONTAINER_ID zap-cli -p 2375 active-scan -r $TARGET_URL
 
 #docker exec $CONTAINER_ID zap-cli -p 2375 alerts
 
-#generate report (file will be inside container)
-docker exec 511b101df42b zap-cli -p 8090 report -o container-report.xml -f xml
+#generate report and get it out of the container
+docker exec $CONTAINER_ID zap-cli -p 2375 report -o container-report.xml -f xml
+docker exec $CONTAINER_ID cat container-report.xml > host-report.xml
 
-#get report content out of container
-docker exec 511b101df42b cat container-report.xml > host-report.xml
+#get session and logs for debugging purposes
+docker exec e5d0d62dc94f zap-cli -p 2375 session save ./zap-session
+docker cp $CONTAINER_ID:$(docker exec $CONTAINER_ID pwd)/zap-session ./zap-session
+docker logs $CONTAINER_ID > docker-log.txt
 
 # docker logs [container ID or name]
 divider==================================================================

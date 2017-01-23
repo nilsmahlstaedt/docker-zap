@@ -15,6 +15,12 @@ docker exec $CONTAINER_ID zap-cli -p 2375 ajax-spider $TARGET_URL
 
 #docker exec $CONTAINER_ID zap-cli -p 2375 alerts
 
+#generate report (file will be inside container)
+docker exec 511b101df42b zap-cli -p 8090 report -o container-report.xml -f xml
+
+#get report content out of container
+docker exec 511b101df42b cat container-report.xml > host-report.xml
+
 # docker logs [container ID or name]
 divider==================================================================
 printf "\n"

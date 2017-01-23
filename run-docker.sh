@@ -21,7 +21,7 @@ docker exec $CONTAINER_ID zap-cli -p 2375 report -o container-report.xml -f xml
 docker exec $CONTAINER_ID cat container-report.xml > host-report.xml
 
 #get session and logs for debugging purposes
-docker exec e5d0d62dc94f zap-cli -p 2375 session save ./zap-session
+docker exec $CONTAINER_ID zap-cli -p 2375 session save ./zap-session
 docker cp $CONTAINER_ID:$(docker exec $CONTAINER_ID pwd)/zap-session ./zap-session
 docker logs $CONTAINER_ID > docker-log.txt
 
